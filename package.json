@@ -1,0 +1,38 @@
+{
+    "name": "masjed-quran-attendance",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Ù†Ø¸Ø§Ù… Ø­Ø¶ÙˆØ± ÙˆÙ…ØªØ§Ø¨Ø¹Ø© Ø­Ù„Ù‚Ø§Øª ØªØ­ÙÙŠØ¸ Ø§Ù„Ù‚Ø±Ø¢Ù† Ø§Ù„ÙƒØ±ÙŠÙ…",
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "test": "node --test \"tests/unit/*.test.mjs\"",
+        "test:e2e": "node --test \"tests/integration/*.test.mjs\""
+    },
+    "dependencies": {
+        "@tailwindcss/forms": "^0.5.7",
+        "@tailwindcss/typography": "^0.5.15",
+        "autoprefixer": "^10.4.20",
+        "bcryptjs": "^2.4.3",
+        "date-fns": "^2.30.0",
+        "date-fns-tz": "^2.0.1",
+        "jose": "^5.9.3",
+        "jsonwebtoken": "^9.0.2",
+        "moment-hijri": "^2.30.0",
+        "mongoose": "^8.6.3",
+        "next": "^16.3.3",
+        "postcss": "^8.4.47",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
+        "tailwindcss": "^3.4.13"
+    },
+    "devDependencies": {
+        "eslint": "^9.0.0",
+        "eslint-config-next": "^16.3.3"
+    },
+    "engines": {
+        "node": ">=20.0.0"
+    }
+}
