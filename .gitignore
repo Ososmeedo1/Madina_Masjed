@@ -18,3 +18,8 @@ Thumbs.db
 
 *.tsbuildinfo
 next-env.d.ts
+
+# Local dev / generated material (not app source)
+material/
+latest.txt
+assets/

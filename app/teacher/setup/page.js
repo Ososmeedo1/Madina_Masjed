@@ -17,7 +17,7 @@ export default async function TeacherSetupPage() {
 
   if (count === null) {
     return (
-      <main className="flex min-h-screen items-center justify-center px-5">
+      <main className="flex h-dvh items-center justify-center px-5">
         <div className="card max-w-md p-8 text-center">
           <svg width="100" height="80" viewBox="0 0 120 100" fill="none" className="mx-auto mb-4 text-primary opacity-25" aria-hidden="true">
             <rect x="35" y="40" width="50" height="45" rx="4" fill="currentColor" />
@@ -40,7 +40,7 @@ export default async function TeacherSetupPage() {
   if (count > 0) redirect('/login');
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center px-5 py-12">
+    <main className="relative flex h-dvh items-center justify-center px-5 py-12">
       <Image
         src="/images/picture3.jpg"
         alt=""
