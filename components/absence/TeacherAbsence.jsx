@@ -47,7 +47,7 @@ export default function TeacherAbsence() {
     <Card>
       <h2 className="text-lg">غياب المعلم</h2>
       <p className="mt-1 mb-4 text-sm text-on-surface-variant">
-        عند تفعيل الغياب يتوقف تسجيل الحضور في جميع المجموعات لهذا اليوم فقط، وينتهي تلقائيًا منتصف الليل بتوقيت الرياض.
+        عند تفعيل الغياب يتوقف تسجيل الحضور في جميع المجموعات لهذا اليوم فقط، وينتهي تلقائيًا منتصف الليل بتوقيت المدينة.
       </p>
 
       {absent === null && !error ? (
