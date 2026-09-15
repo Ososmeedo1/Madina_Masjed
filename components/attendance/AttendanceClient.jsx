@@ -52,6 +52,8 @@ export default function AttendanceClient({ initial }) {
   const [freshIds, setFreshIds] = useState(() => new Set());
   const [currentRecord, setCurrentRecord] = useState(null);
   const [checkingRecord, setCheckingRecord] = useState(true);
+  const [conflict, setConflict] = useState(null);
+  const [ownedTokens, setOwnedTokens] = useState({});
   const toast = useToast();
   const prevIdsRef = useRef(null);
   const statusRef = useRef(initial.status);
@@ -62,6 +64,15 @@ export default function AttendanceClient({ initial }) {
       prevIdsRef.current = new Set(data.entries.map((e) => e._id));
     }
   }, [data]);
+
+  useEffect(() => {
+    try {
+      const store = JSON.parse(localStorage.getItem('masjed_edit_tokens') || '{}');
+      setOwnedTokens(store);
+    } catch {
+      setOwnedTokens({});
+    }
+  }, [data.entries]);
 
   useEffect(() => {
     const tick = () => setClock(CLOCK_FMT.format(new Date()));
@@ -143,12 +154,12 @@ export default function AttendanceClient({ initial }) {
     }
   }
 
-  async function onSubmit(e) {
-    e.preventDefault();
+  async function submitWith(convert) {
     setSubmitting(true);
     setMessage('');
     setErrors({});
     setDupId(null);
+    setConflict(null);
 
     try {
       const body = activeTab === 'present'
@@ -156,6 +167,7 @@ export default function AttendanceClient({ initial }) {
         : activeTab === 'listener'
           ? { ...form, status: 'listener' }
           : { ...form, status: 'absent' };
+      if (convert) body.convert = true;
 
       const res = await fetchJson(
         `/api/attendance/groups/${initial.group.key}/register`,
@@ -171,6 +183,12 @@ export default function AttendanceClient({ initial }) {
         setErrors(resp.errors || {});
         setMessage(apiErrorAr(resp, res.status, 'تعذر التسجيل'));
         setDupId(resp.attendanceId || null);
+        if (resp.code === 'STATUS_CONFLICT') {
+          setConflict({
+            existingStatus: resp.recordStatus,
+            requestedStatus: activeTab === 'present' ? 'present' : activeTab === 'listener' ? 'listener' : 'absent',
+          });
+        }
         return;
       }
 
@@ -191,6 +209,11 @@ export default function AttendanceClient({ initial }) {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    submitWith(false);
   }
 
   const presentEntries = data.entries.filter((e) => e.status === 'present');
@@ -295,7 +318,7 @@ export default function AttendanceClient({ initial }) {
         </Button>
       </div>
 
-      {isOpen && currentRecord && !success && (
+      {currentRecord && !success && (
         <Card className="mb-5 animate-fade-in bg-surface-container-low p-5">
           <div className="mb-3 flex items-center gap-3">
             <StatusBadge
@@ -377,6 +400,23 @@ export default function AttendanceClient({ initial }) {
                   </Link>
                 </>
               )}
+            </div>
+          )}
+
+          {conflict && (
+            <div className="mb-4 rounded-md bg-secondary-container px-4 py-3 text-sm font-semibold text-on-secondary-container">
+              <p className="mb-3">
+                أنت مسجل {conflict.existingStatus === 'present' ? 'حضور' : conflict.existingStatus === 'listener' ? 'استماع' : 'غياب'} اليوم —
+                هل تريد التحويل إلى {conflict.requestedStatus === 'present' ? 'حضور' : conflict.requestedStatus === 'listener' ? 'استماع' : 'غياب'}؟
+              </p>
+              <div className="flex gap-2">
+                <Button className="flex-1" disabled={submitting} loading={submitting} onClick={() => submitWith(true)}>
+                  نعم، تحويل السجل
+                </Button>
+                <Button variant="outline" disabled={submitting} onClick={() => setConflict(null)}>
+                  إلغاء
+                </Button>
+              </div>
             </div>
           )}
 
@@ -537,6 +577,15 @@ export default function AttendanceClient({ initial }) {
                 <span dir="ltr" className="shrink-0 font-jakarta text-sm text-on-surface-variant">
                   {entry.registeredAtTime}
                 </span>
+                {ownedTokens[entry._id] && (
+                  <Link
+                    href={`/attendance/edit/${entry._id}`}
+                    className="shrink-0 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-on-primary transition-colors hover:bg-primary-container"
+                    aria-label={`تعديل سجل ${entry.studentName}`}
+                  >
+                    تعديل
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
