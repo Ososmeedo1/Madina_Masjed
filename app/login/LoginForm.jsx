@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import QuickLoginButton from '@/components/auth/QuickLoginButton';
 import { ErrorAlert, SuccessAlert } from '@/components/ui/Alerts';
 
 export default function LoginForm() {
@@ -78,6 +79,8 @@ export default function LoginForm() {
       <Button type="submit" className="w-full" disabled={loading}>
         {loading ? 'جارٍ التحقق...' : 'تسجيل الدخول'}
       </Button>
+
+      <QuickLoginButton />
     </form>
   );
 }

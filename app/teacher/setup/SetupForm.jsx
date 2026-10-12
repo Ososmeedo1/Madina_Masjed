@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import QuickLoginButton from '@/components/auth/QuickLoginButton';
 
 export default function SetupForm() {
   const router = useRouter();
@@ -96,6 +97,8 @@ export default function SetupForm() {
       <Button type="submit" className="w-full" disabled={loading}>
         {loading ? 'جارٍ الإعداد...' : 'إنشاء الحساب والبدء'}
       </Button>
+
+      <QuickLoginButton label="دخول سريع بدون إنشاء حساب" />
 
       <p className="text-center text-sm text-on-surface-variant">
         يُنشأ هذا الحساب مرة واحدة فقط عند أول تشغيل للنظام
